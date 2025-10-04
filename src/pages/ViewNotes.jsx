@@ -8,6 +8,7 @@ const ViewNotes = () => {
   const dispatch = useDispatch()
   
   const [wantsToDelete, setWantsToDelete] = useState(false);
+  const [noteName, setNoteName] = useState("");
   const {notes, error, status} = useSelector((state) => state.notes);
 
   useEffect(() => {
@@ -38,24 +39,24 @@ const ViewNotes = () => {
       </div>
     );
   }
-  if (wantsToDelete) {
-    return (
-      <div className="text-center py-10">
-        <div className="flex justify-center mb-4 text-red-500">
-          <Trash2 size={48} />
-        </div>
-        <p className="text-gray-700 mb-4">Are you sure you want to delete this note?</p>
-        <div className="flex justify-center gap-4">
-          <button className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">
-            Yes, Delete
-          </button>
-          <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors" onClick={() => setWantsToDelete(false)}>
-            Cancel
-          </button>
-        </div>
-      </div>
-    );
-  }
+  // if (wantsToDelete) {
+  //   return (
+  //     <div className="text-center py-10">
+  //       <div className="flex justify-center mb-4 text-red-500">
+  //         <Trash2 size={48} />
+  //       </div>
+  //       <p className="text-gray-700 mb-4">Are you sure you want to delete this note?</p>
+  //       <div className="flex justify-center gap-4">
+  //         <button className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors">
+  //           Yes, Delete
+  //         </button>
+  //         <button className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors" onClick={() => setWantsToDelete(false)}>
+  //           Cancel
+  //         </button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (notes.length === 0) {
     return (
@@ -87,11 +88,18 @@ const ViewNotes = () => {
           {notes.length} {notes.length === 1 ? "note" : "notes"} stored
         </p>
       </div>
+      {wantsToDelete && (
+        <div className="border items-center mb-10">
+          <h1 className="text-red-150 font-semibold">Are you sure you want to delete this note, named {noteName}? </h1>
+          <button className="text-red-800" onClick={() => {setWantsToDelete(false)}}>No, of course not.</button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {notes.map((note) => (
           <NoteCard key={note.id} note={note} onDelete={() => {
             setWantsToDelete(true);
+            setNoteName(note.title);
           }} />
         ))}
       </div>
